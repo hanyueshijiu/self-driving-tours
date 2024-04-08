@@ -8,18 +8,17 @@
 </template>
 
 <script lang="ts" setup>
-import HeaderVue from './components/header.vue';
+import HeaderVue from "./components/header.vue";
 </script>
 
 <style lang="less" scoped>
-  .layoutBox {
-    height: 100vh;
+.layoutBox {
+  width: 100vw;
+  height: 100vh;
+  .mainVue {
+    margin-top: 20vh;
     width: 100vw;
-    display: flex;
-    flex-direction: column;
-    .mainVue {
-      flex: 1;
-      width: 100vw;
-    }
+    height: 80vh;
   }
+}
 </style>

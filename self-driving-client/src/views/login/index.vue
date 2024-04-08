@@ -67,7 +67,7 @@ const changeModel = () => {
 .container {
   width: 100vw;
   height: 100vh;
-  background-image: url(https://ts1.cn.mm.bing.net/th/id/R-C.707934369ccf01ec4d93e95264333fa3?rik=UZti7qCa0H87NQ&riu=http%3a%2f%2fimg.pptjia.com%2fimage%2f20180609%2fa390d7d23c6dc9ca62fdf56189df3471.jpg&ehk=TEBCbJ6oWc3A7PiyF%2fJR0fokK%2fwrJQLgSFGlBvqhIOs%3d&risl=&pid=ImgRaw&r=0);
+  background-image: url(https://pic3.zhimg.com/v2-bcf4266b4b219d207ba526c56394f5ca_r.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   box-sizing: border-box;
