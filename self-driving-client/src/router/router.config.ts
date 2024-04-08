@@ -1,5 +1,5 @@
 import { RouteRecordRaw } from "vue-router";
-import Layout from '../layout/Layout.vue';
+const Layout = import('../layout/Layout.vue');
 const Home = import('../views/home/index.vue');
 // 实际的主要的路由
 export const accessRoutes: RouteRecordRaw[] = [  
@@ -14,6 +14,11 @@ export const accessRoutes: RouteRecordRaw[] = [
         path: '/selfDriving/home',
         name: 'home',
         component: () => Home
+      },
+      {
+        path: '/selfDriving/road',
+        name: 'road',
+        component: () => import('../views/road/index.vue')
       },
     ]
   }

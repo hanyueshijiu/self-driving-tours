@@ -70,9 +70,9 @@ const clickFn = (value) => {
   left: 0;
   width: 100vw;
   height: 20vh;
-  background-image: url(https://pic3.zhimg.com/80/v2-3077c07424a238afaec7e0a3b4f27b4e_720w.webp);
+  background-image: url(https://pic3.zhimg.com/80/v2-8d43b0b1b27c66362f4b085f8668e3b6_720w.webp);
   /* 使背景图片居中 */
-  background-position: center;
+  background-position: 60%;
 
   /* 背景图片不重复 */
   background-repeat: no-repeat;
