@@ -1,15 +1,50 @@
 <template>
   <div class="headerBox">
+    <div class="mianModule">
+      <div class="typeBox">
+        <div
+          :class="['typeItem', item.key == current ? 'selected' : '']"
+          v-for="(item, index) in items"
+          :key="index"
+          @click="changeType(item)"
+        >
+          {{ item.title }}
+        </div>
+      </div>
+      <div class="userInfo">
+        <div class="preStatus">
+          <div v-if="userName == ''">
+            <a-button type="primary">登录</a-button><a-button>注册</a-button>
+          </div>
+          <div v-else style="color: #03a9f4;">
+            <a-dropdown>
+              <a class="ant-dropdown-link" @click.prevent>
+                {{`欢迎您，${userName}`}}
+                <DownOutlined />
+              </a>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item>
+                    <a href="javascript:;">修改信息</a>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a href="javascript:;">退出登录</a>
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="titleModule">
       <div class="webTitle">自驾游旅游网</div>
+    </div>
+    <div class="searchBox">
       <div class="search">
-        <input type="text" placeholder="请输入目的地/景点、酒店等">
+        <input type="text" placeholder="请输入目的地/景点、酒店等" />
         <a-button type="primary">搜索</a-button>
       </div>
-      <div class="userInfo">登录 | 注册</div>
-    </div>
-    <div class="mianModule">
-
     </div>
   </div>
 </template>
@@ -23,43 +58,36 @@ import {
   CameraFilled,
   FlagFilled,
 } from "@ant-design/icons-vue";
-import { MenuProps } from "ant-design-vue";
-const current = ref<string[]>(["home"]);
-const items = ref<MenuProps["items"]>([
+import { useRouter } from "vue-router";
+import { DownOutlined } from "@ant-design/icons-vue";
+const router = useRouter();
+const current = ref<string>(["/selfDriving/home"]);
+const items = ref([
   {
-    key: "home",
-    icon: () => h(ThunderboltFilled),
-    label: "首页推荐",
+    key: "/selfDriving/home",
     title: "首页推荐",
   },
   {
-    key: "planning",
-    icon: () => h(FlagFilled),
-    label: "自驾推荐",
+    key: "/selfDriving/road",
     title: "自驾推荐",
   },
   {
-    key: "Recommended",
-    icon: () => h(FireFilled),
-    label: "景点门票",
+    key: "/selfDriving/scenery",
     title: "景点门票",
   },
   {
-    key: "hotel",
-    icon: () => h(HomeFilled),
-    label: "酒店民宿",
+    key: "/selfDriving/hotel",
     title: "酒店民宿",
   },
   {
-    key: "evaluate",
-    icon: () => h(CameraFilled),
-    label: "反馈评价",
+    key: "/selfDriving/evaluate",
     title: "反馈评价",
   },
 ]);
-
-const clickFn = (value) => {
-  console.log(value);
+const userName = ref("寒月十九");
+const changeType = (value) => {
+  current.value = value.key;
+  router.replace(value.key);
 };
 </script>
 
@@ -69,7 +97,7 @@ const clickFn = (value) => {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 20vh;
+  height: 30vh;
   background-image: url(https://pic3.zhimg.com/80/v2-8d43b0b1b27c66362f4b085f8668e3b6_720w.webp);
   /* 使背景图片居中 */
   background-position: 60%;
@@ -79,20 +107,56 @@ const clickFn = (value) => {
 
   /* 背景图片覆盖整个容器，且保持图片的宽高比 */
   background-size: cover;
+  .mianModule {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5rem;
+    position: relative;
+    .typeBox {
+      display: flex;
+      .typeItem {
+        height: 3rem;
+        line-height: 3rem;
+        margin-left: 2rem;
+        padding: 0 2rem;
+        box-sizing: border-box;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .typeItem:hover {
+        background: #03a9f4;
+      }
+      .selected {
+        background: #03a9f4;
+        color: #fff;
+      }
+    }
+    .userInfo {
+      position: absolute;
+      right: 10vw;
+      top: 2vh;
+    }
+  }
   .titleModule {
     display: flex;
-    padding: 2rem 10rem 1rem;
+    height: 7rem;
     box-sizing: border-box;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     .webTitle {
       background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-size: 2rem;
+      font-size: 3rem;
     }
+  }
+  .searchBox {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
     .search {
-      width: 25rem;
+      width: 30rem;
       height: 2rem;
       display: flex;
       input {
@@ -100,16 +164,12 @@ const clickFn = (value) => {
         height: 2rem;
         border-radius: 5px;
         background-color: transparent; /* 去除背景 */
-        border: 1px solid #fff; /* 去除边框 */
+        border: 0.5px solid #fff; /* 去除边框 */
         outline: none; /* 去除聚焦时的轮廓线 */
         padding: 0; /* 去除内边距 */
         margin: 0; /* 去除外边距 */
       }
     }
-  }
-  .mianModule {
-    display: flex;
-    justify-content: space-around;
   }
 }
 </style>

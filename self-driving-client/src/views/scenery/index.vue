@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    个人信息
+    反馈评价
     
   </div>
 </template>

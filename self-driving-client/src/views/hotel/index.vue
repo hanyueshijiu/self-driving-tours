@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    个人信息
+    酒店民宿
     
   </div>
 </template>
