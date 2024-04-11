@@ -16,7 +16,7 @@ import HeaderVue from "./components/header.vue";
   width: 100vw;
   height: 100vh;
   .mainVue {
-    margin-top: 30vh;
+    margin-top: 18vh;
     width: 100vw;
   }
 }

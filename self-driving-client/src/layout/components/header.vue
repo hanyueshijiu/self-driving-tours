@@ -1,6 +1,7 @@
 <template>
   <div class="headerBox">
     <div class="mianModule">
+      <div class="webTitle">自驾游旅游网</div>
       <div class="typeBox">
         <div
           :class="['typeItem', item.key == current ? 'selected' : '']"
@@ -36,9 +37,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="titleModule">
-      <div class="webTitle">自驾游旅游网</div>
     </div>
     <div class="searchBox">
       <div class="search">
@@ -97,7 +95,10 @@ const changeType = (value) => {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 30vh;
+  height: 18vh;
+  z-index: 100;
+  border: 1px solid #eee;
+  border-radius: 5px;
   background-image: url(https://pic3.zhimg.com/80/v2-8d43b0b1b27c66362f4b085f8668e3b6_720w.webp);
   /* 使背景图片居中 */
   background-position: 60%;
@@ -109,10 +110,15 @@ const changeType = (value) => {
   background-size: cover;
   .mianModule {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     height: 5rem;
-    position: relative;
+    .webTitle {
+      background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 3rem;
+    }
     .typeBox {
       display: flex;
       .typeItem {
@@ -133,22 +139,7 @@ const changeType = (value) => {
       }
     }
     .userInfo {
-      position: absolute;
-      right: 10vw;
-      top: 2vh;
-    }
-  }
-  .titleModule {
-    display: flex;
-    height: 7rem;
-    box-sizing: border-box;
-    justify-content: center;
-    align-items: center;
-    .webTitle {
-      background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-size: 3rem;
+      cursor: pointer;
     }
   }
   .searchBox {

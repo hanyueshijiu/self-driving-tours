@@ -15,4 +15,10 @@ export default defineConfig({
       ],
     }),
   ],
+  resolve: {
+    alias: {
+      '@': '/src', // 这里假设 '@' 代表 'src/' 目录
+      // 添加更多别名...
+    },
+  },
 })
