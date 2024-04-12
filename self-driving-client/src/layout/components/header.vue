@@ -98,6 +98,9 @@ const changeType = (value) => {
   height: 18vh;
   z-index: 100;
   border: 1px solid #eee;
+  // box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 
+  //             0px 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
   border-radius: 5px;
   background-image: url(https://pic3.zhimg.com/80/v2-8d43b0b1b27c66362f4b085f8668e3b6_720w.webp);
   /* 使背景图片居中 */
