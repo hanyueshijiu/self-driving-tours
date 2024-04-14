@@ -48,18 +48,11 @@
 </template>
 
 <script lang="ts" setup>
-import { h, ref } from "vue";
-import {
-  ThunderboltFilled,
-  FireFilled,
-  HomeFilled,
-  CameraFilled,
-  FlagFilled,
-} from "@ant-design/icons-vue";
+import {  ref } from "vue";
 import { useRouter } from "vue-router";
 import { DownOutlined } from "@ant-design/icons-vue";
 const router = useRouter();
-const current = ref<string>(["/selfDriving/home"]);
+const current = ref<string>("/selfDriving/home");
 const items = ref([
   {
     key: "/selfDriving/home",
@@ -146,7 +139,7 @@ const changeType = (value) => {
     }
   }
   .searchBox {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     display: flex;
     justify-content: center;
     .search {

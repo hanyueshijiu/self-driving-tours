@@ -1,34 +1,48 @@
 <template>
-  <div class="container">
-    反馈评价
-    
+  <div class="containerBox">
+    <div class="container" @mouseleave="hideBox">
+      <div class="main-box" @mouseover="showBox">{{isBoxVisible}}</div>
+    </div>
+    <div class="extra-box" v-show="isBoxVisible">1111</div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
-const travelRoad = ref([
-  {
-    img: "https://pic2.zhimg.com/80/v2-b29235f3d0ef6f978cbdd00c76b8090d_720w.webp",
-    jumpUrl: "1",
-    id: 0,
-  },
-  {
-    img: "https://pic1.zhimg.com/80/v2-52bbb0d46d5c55c54d8e9066372e5d38_720w.webp",
-    jumpUrl: "2",
-    id: 1,
-  },
-  {
-    img: "https://pic2.zhimg.com/80/v2-61f77d61553c94f518161f051eafc449_720w.webp",
-    jumpUrl: "3",
-    id: 2,
-  },
-]);
+const isBoxVisible = ref(false); // 控制额外盒子显示的响应式数据
+
+function showBox() {
+  console.log('show');
+  
+  isBoxVisible.value = true; // 显示额外盒子
+}
+
+function hideBox() {
+  console.log('hide');
+  isBoxVisible.value = false; // 隐藏额外盒子
+}
 </script>
 
-<style lang=less scoped>
-.container {
-  padding: 3rem 10rem;
-  box-sizing: border-box;
+<style lang="less" scoped>
+.containerBox {
+  .container {
+    position: relative;
+    width: 200px; // 根据需要调整
+
+    .main-box,
+    .extra-box {
+      padding: 10px;
+      border: 1px solid #ccc;
+      margin: 5px;
+    }
+
+    .extra-box {
+      display: none; // 默认不显示
+      position: absolute;
+      top: 100%; // 紧贴主盒子下方
+      left: 0;
+      background-color: blue
+    }
+  }
 }
 </style>

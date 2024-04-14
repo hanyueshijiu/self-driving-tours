@@ -14,7 +14,9 @@
       <div class="hotRecommend">
         <h1>热门目的地</h1>
         <div class="hotList">
-          <div class="hotCity"></div>
+          <div class="hotCity" v-for="(item,index) in 8" :key="index">
+            热门城市
+          </div>
         </div>
       </div>
     </div>
@@ -27,12 +29,12 @@ import MapContainer from '@/components/MapContainer.vue';
 const show = ref<boolean>(false);
 const change = () => {
   show.value = !show.value;
-}
+};
 
 
 </script>
 
-<style lang=less scoped>
+<style lang="less" scoped>
 .container {
   padding: 3rem 10rem;
   box-sizing: border-box;
@@ -56,6 +58,22 @@ const change = () => {
     .hotRecommend {
       margin: 0 auto;
       text-align: center;
+      .hotList {
+        display: flex;
+        flex-wrap: wrap; /* 允许子项换行 */
+        justify-content: space-around; /* 子项左对齐，可以根据需要调整 */
+        gap: 20px; /* 子项之间的间距 */
+        .hotCity {
+          flex: 0 0 calc(25% - 20px); /* 每个子项占行宽的25%，减去间距 */
+          height: 10rem; /* 高度，可以根据实际需要调整 */
+          background-color: #fff; /* 背景色 */
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), /* 主阴影 */
+                      0 6px 20px rgba(0, 0, 0, 0.19); /* 深层阴影，增加立体感 */
+          padding: 10px; /* 内部间距 */
+          box-sizing: border-box; /* 包括padding和border在内的宽高计算方式 */
+          border-radius: 10px;
+        }
+      }
     }
   }
 }

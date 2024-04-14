@@ -155,8 +155,8 @@ const travelRoad = ref([
     }
     .secneryBox {
       width: 70vw;
-      height: 40vh;
-      padding: 2rem 5rem;
+      height: 50vh;
+      padding: 2rem 2rem;
       box-sizing: border-box;
       display: flex;
       .sceneryImg {
