@@ -14,7 +14,7 @@ import HeaderVue from "./components/header.vue";
 <style lang="less" scoped>
 .layoutBox {
   width: 100vw;
-  height: 100vh;
+  background: linear-gradient(to bottom, #ADD8E6 0%, #FFFFFF 100%);
   .mainVue {
     margin-top: 18vh;
     width: 100vw;

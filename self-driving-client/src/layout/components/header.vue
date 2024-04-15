@@ -69,11 +69,7 @@ const items = ref([
   {
     key: "/selfDriving/hotel",
     title: "酒店民宿",
-  },
-  {
-    key: "/selfDriving/evaluate",
-    title: "反馈评价",
-  },
+  }
 ]);
 const userName = ref("寒月十九");
 const changeType = (value) => {
@@ -91,8 +87,8 @@ const changeType = (value) => {
   height: 18vh;
   z-index: 100;
   border: 1px solid #eee;
-  // box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 
-  //             0px 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 
+              0px 1px 2px rgba(0, 0, 0, 0.24);
   box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
   border-radius: 5px;
   background-image: url(https://pic3.zhimg.com/80/v2-8d43b0b1b27c66362f4b085f8668e3b6_720w.webp);
@@ -110,7 +106,7 @@ const changeType = (value) => {
     align-items: center;
     height: 5rem;
     .webTitle {
-      background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+      background: linear-gradient(90deg, #03a9f4, #3f51b5, #9c27b0, #e91e63);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       font-size: 3rem;

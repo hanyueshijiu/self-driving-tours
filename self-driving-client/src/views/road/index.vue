@@ -39,7 +39,7 @@ const change = () => {
   padding: 3rem 10rem;
   box-sizing: border-box;
   .searchModule {
-    width: 100%;
+    width: 70vw;
     margin: 0 auto;
     border: 1px solid #eee;
     border-radius: 15px;
