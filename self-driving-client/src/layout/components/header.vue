@@ -25,12 +25,8 @@
               </a>
               <template #overlay>
                 <a-menu>
-                  <a-menu-item>
-                    <a href="javascript:;">修改信息</a>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a href="javascript:;">退出登录</a>
-                  </a-menu-item>
+                  <a-menu-item @click="goMessage">修改信息</a-menu-item>
+                  <a-menu-item @click="loginout">退出登录</a-menu-item>
                 </a-menu>
               </template>
             </a-dropdown>
@@ -72,10 +68,17 @@ const items = ref([
   }
 ]);
 const userName = ref("寒月十九");
-const changeType = (value) => {
+const changeType = (value:any) => {
   current.value = value.key;
   router.replace(value.key);
 };
+const goMessage = () => {
+  router.push('/message');
+}
+
+const loginout = () => {
+  router.push('/login');
+}
 </script>
 
 <style lang="less" scoped>
