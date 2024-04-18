@@ -73,7 +73,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRoute } from 'vue-router';
 const travelRoad = ref([
   {
     img: "https://pic2.zhimg.com/80/v2-b29235f3d0ef6f978cbdd00c76b8090d_720w.webp",
@@ -91,6 +92,8 @@ const travelRoad = ref([
     id: 2,
   },
 ]);
+
+const route = useRoute();
 </script>
 
 <style lang=less scoped>

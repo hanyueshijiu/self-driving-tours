@@ -36,8 +36,8 @@
     </div>
     <div class="searchBox">
       <div class="search">
-        <input type="text" placeholder="请输入目的地/景点、酒店等" />
-        <a-button type="primary">搜索</a-button>
+        <input type="text" v-model="inputValue" placeholder="请输入目的地/景点、酒店等" />
+        <a-button type="primary" @click="goSearch">搜索</a-button>
       </div>
     </div>
   </div>
@@ -45,9 +45,10 @@
 
 <script lang="ts" setup>
 import {  ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { DownOutlined } from "@ant-design/icons-vue";
 const router = useRouter();
+const route = useRoute();
 const current = ref<string>("/selfDriving/home");
 const items = ref([
   {
@@ -78,6 +79,15 @@ const goMessage = () => {
 
 const loginout = () => {
   router.push('/login');
+}
+
+let inputValue = ref('');
+
+const goSearch = () => {
+  console.log(route.path,'path');
+  let searchValue = inputValue.value;
+  
+  router.push({name: 'search', query: { keyword: searchValue}});
 }
 </script>
 

@@ -35,6 +35,16 @@ export const accessRoutes: RouteRecordRaw[] = [
         name: 'evaluate',
         component: () => import('../views/evaluate/index.vue')
       },
+      {
+        path: '/selfDriving/search',
+        name: 'search',
+        component: () => import('../views/search/index.vue')
+      },
+      {
+        path: '/selfDriving/detail',
+        name: 'detail',
+        component: () => import('../views/detail/index.vue')
+      },
     ]
   }
 ]
