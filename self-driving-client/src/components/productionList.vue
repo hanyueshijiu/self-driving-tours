@@ -17,13 +17,19 @@
       </div>
       <div class="buyBtn">
         <div class="price">￥100</div>
-        <div class="btn">购买</div>
+        <div class="btn" @click="goDetail">购买</div>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  import { useRouter } from "vue-router";
+  const router = useRouter();
+  const goDetail = () => {
+    router.push({name: 'detail', query: { sid : 47677}})
+  };
+</script>
 
 <style lang="less" scoped>
 .listcontainer {
