@@ -1,35 +1,35 @@
 <template>
   <div class="container">
-    <div class="detailMain">
+    <div class="detailMain" v-if="detailInfo">
       <div class="mainInfo">
         <img
-          src="https://dimg04.c-ctrip.com/images/1lo1k12000ddck5226264_R_1600_10000.jpg"
+          :src="detailInfo.imgUrl"
           alt=""
         />
         <div class="detailInfo">
           <div class="line">
-            <span class="title">拙政园</span><span class="star">5A景区 </span
-            ><span class="type">园林古镇</span>
+            <span class="title">{{detailInfo.sceneryName}}</span><span class="star">{{ detailInfo.star }}景区 </span
+            ><span class="type">{{ detailInfo.special }}</span>
           </div>
           <div class="line">
-            <span class="special">“江南园林典范，天下园林之母”</span>
+            <span class="special">{{ detailInfo.evaluate }}</span>
           </div>
           <div class="line">
-            景点地址：<span class="text">江苏省苏州市姑苏区东北街178号</span>
+            景点地址：<span class="text">{{ detailInfo.address }}</span>
           </div>
           <div class="line">
             开放时间：<span class="openTime"
-              >周一至周末 全天 07:30-17:30, 17:00停止入园</span
+              >{{detailInfo.openTime}}</span
             >
           </div>
           <div class="line">
             景区设施：<span class="text"
-              >停车场、免费WIFI、婴儿车租赁、宠物禁止入园、卫生间、行李寄存、手机充电、商店、轮椅租赁</span
+              >{{ detailInfo. facility }}</span
             >
           </div>
-          <div class="line">建议游玩时间：<span class="text">2~3小时</span></div>
+          <div class="line" v-if="detailInfo.playTime">建议游玩时间：<span class="text">{{detailInfo.playTime}}</span></div>
           <div class="buy">
-            <div class="price">￥70</div>
+            <div class="price" v-if="detailInfo.price">￥{{ detailInfo.price }}</div>
             <div class="btn" @click="showDrawer">立即抢购</div>
           </div>
         </div>
@@ -80,7 +80,7 @@
     </div>
     <a-drawer
       v-model:open="open"
-      title="拙政园购票"
+      :title="detailInfo.sceneryName"
       width="50vw"
       :closable="false"
       :footer-style="{ textAlign: 'right' }"
@@ -126,11 +126,13 @@
 
 <script lang="ts" setup>
 import { useRouter, useRoute } from "vue-router";
-import { ref, reactive, watchEffect } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
+import http from '@/utils/http';
+
 dayjs.extend(relativeTime);
 const route = useRoute();
 interface User {
@@ -143,6 +145,7 @@ type Comment = Record<string, string>;
 const dynamicValidateForm = reactive<{ users: User[] }>({
   users: [],
 });
+
 const removeUser = (item: User) => {
   const index = dynamicValidateForm.users.indexOf(item);
   if (index !== -1) {
@@ -167,6 +170,7 @@ const open = ref<boolean>(false);
 const showDrawer = () => {
   open.value = true;
 };
+
 const onClose = () => {
   open.value = false;
 };
@@ -237,9 +241,13 @@ const handleSubmit = () => {
   }, 1000);
 };
 
-watchEffect(() => {
-  const params = route.query;
-  console.log("路由参数变化:", params);
+const detailInfo = ref({});
+
+onMounted(async() => {
+  const { sid } = route.query;
+  const sceneryInfo = await http.post('/api/getSceneryBySid',{sid});
+  console.log(sceneryInfo.data[0], 'sceneryInfo');
+  detailInfo.value = sceneryInfo.data[0];
 });
 </script>
 

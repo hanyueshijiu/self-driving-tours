@@ -1,34 +1,44 @@
 <template>
   <div class="listcontainer">
-    <div class="listItem" v-for="(item, index) in 20" :key="index">
+    <div class="listItem" v-for="(item, index) in props.list" :key="index">
       <!-- 头图 -->
       <img
-        src="https://img.alicdn.com/imgextra/i3/6000000005257/O1CN01QoKeYn1ohl3iBkbKY_!!6000000005257-0-hotel.jpg_200x200xz"
+        :src="item.imgUrl"
         alt=""
       />
       <div class="description">
         <div class="title">
-          <span class="name">尚湖风景区</span>
-          <span class="star">5A景点</span>
+          <span class="name">{{item.sceneryName}}</span>
+          <span class="star" v-if="item.star">{{item.star}}景点</span>
         </div>
-        <div class="address">地址：<span>江苏省苏州市常熟市虞山镇外西三环路尚湖景区</span></div>
-        <div class="feature">特色：<span>一叶扁舟、四季花景、飞鸟过林</span></div>
-        <div class="evaluate"><span class="score">4.5</span>/5分<span class="level">非常好</span></div>
+        <div class="address">
+          地址：<span>{{item.address}}</span>
+        </div>
+        <div class="feature" v-if="item.evaluate">特色：<span>{{item.evaluate}}</span></div>
+        <div class="evaluate">
+          <span class="score">{{item.score}}</span>/5分
+        </div>
       </div>
       <div class="buyBtn">
-        <div class="price">￥100</div>
-        <div class="btn" @click="goDetail">购买</div>
+        <div class="price">￥{{item.price}}</div>
+        <div class="btn" @click="goDetail(item.sid)">购买</div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { useRouter } from "vue-router";
-  const router = useRouter();
-  const goDetail = () => {
-    router.push({name: 'detail', query: { sid : 47677}})
-  };
+import { useRouter } from "vue-router";
+import { defineProps } from "vue";
+
+const props = defineProps({
+  list: Array,
+  type: String
+});
+const router = useRouter();
+const goDetail = (sid:string) => {
+  router.push({ name: "detail", query: { sid } });
+};
 </script>
 
 <style lang="less" scoped>
@@ -38,6 +48,7 @@
     margin-bottom: 1.5rem;
     display: flex;
     border-bottom: 1px solid #ccc;
+    padding-bottom: 1rem;
     img {
       height: auto;
       width: 15rem;
@@ -79,16 +90,15 @@
           border: 1px solid #f60;
           border-radius: 5px;
           color: #f60;
+          padding: .2rem .5rem;
         }
       }
-      .address, .feature, .evaluate {
+      .address,
+      .feature,
+      .evaluate {
         margin-top: 1rem;
         .score {
           font-weight: bold;
-        }
-        .level {
-          margin-left: 1rem;
-          color: #f60;
         }
       }
     }

@@ -1,57 +1,76 @@
 <template>
   <div id="container"></div>
+  <div id="route-panel"></div>
 </template>
 
-
 <script lang="ts" setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { onMounted, ref } from "vue";
 import AMapLoader from "@amap/amap-jsapi-loader";
+import { AMap } from "@amap/amap-jsapi-loader"; // 引入类型定义
 
-let map = null;
-let location = ref(null);
+const map = ref<AMap.Map | null>(null);
 
 onMounted(() => {
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      location.value = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      };
-    },
-    (error) => {
-      console.error("Error Code = " + error.code + " - " + error.message);
-    }
-  );
-  console.log(location);
-  
   AMapLoader.load({
-    key: "71898eaa3134d6ab6aad47d1ffaceaae", // 申请好的Web端开发者Key，首次调用 load 时必填
-    version: "2.0", // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
-    plugins: ["AMap.Scale"], //需要使用的的插件列表，如比例尺'AMap.Scale'，支持添加多个如：['...','...']
+    key: "71898eaa3134d6ab6aad47d1ffaceaae",
+    version: "2.0",
+    plugins: ["AMap.Geocoder", "AMap.Driving"] // 确保插件名正确
   })
-    .then((AMap) => {
-      map = new AMap.Map("container", {
-        // 设置地图容器id
-        viewMode: "3D", // 是否为3D地图模式
-        zoom: 11, // 初始化地图级别
-        // center: [location.longitude || 121.499,location.latitude || 31.239], // 初始化地图中心点位置
-      });
-    })
-    .catch((e) => {
-      console.log(e);
+  .then((AMap) => {
+    map.value = new AMap.Map("container", {
+      center: [116.397428, 39.90923],
+      zoom: 13
     });
+    console.log("AMap and plugins loaded successfully"); // 确认地图和插件加载成功
+    searchRoute("北京", "上海");
+  })
+  .catch((e) => {
+    console.error("Failed to load AMap or plugins: ", e); // 提供详细的错误信息
+  });
 });
 
-onUnmounted(() => {
-  map?.destroy();
-});
+function searchRoute(startPoint: string, endPoint: string) {
+  if (!map.value) {
+    console.error("Map is not initialized");
+    return;
+  }
+
+  const geocoder = new AMap.Geocoder();
+  const driving = new AMap.Driving({
+    map: map.value,
+    panel: "route-panel"
+  });
+
+  Promise.all([geocoder.getLocation(startPoint), geocoder.getLocation(endPoint)])
+    .then((results) => {
+      const [startGeo, endGeo] = results;
+      if (startGeo.geocodes.length && endGeo.geocodes.length) {
+        const startPos = startGeo.geocodes[0].location;
+        const endPos = endGeo.geocodes[0].location;
+        driving.search(
+          { type: "start", location: startPos },
+          { type: "end", location: endPos }
+        );
+        console.log("Route search initiated successfully"); // 确认路线搜索启动成功
+      } else {
+        console.error("Geocoding failed for one of the locations");
+      }
+    })
+    .catch((error) => {
+      console.error("Geocoding error:", error);
+    });
+}
 </script>
 
-<style lang=less  scoped>
+
+<style lang="less" scoped>
 #container {
   padding: 0px;
   margin: 0px;
   width: 100%;
   height: 800px;
+}
+#route-panel {
+  margin-top: 20px;
 }
 </style>

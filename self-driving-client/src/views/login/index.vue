@@ -14,25 +14,25 @@
         <div class="modelTitle">{{model === 'login' ? '登录' : '注册'}}</div>
         <div class="main" v-if="model === 'login'">
           <div class="inpbox">
-            <input type="text" placeholder="请输入手机号" />
+            <input type="number" maxlength="11" v-model="loginForm.phone" placeholder="请输入手机号" />
           </div>
           <div class="inpbox">
-            <input type="password" placeholder="请输入密码" />
+            <input type="password" v-model="loginForm.password" placeholder="请输入密码" />
           </div>
         </div>
         <div class="main" v-else>
           <div class="inpbox mt2">
-            <input type="text" placeholder="请输入手机号" />
+            <input type="number" maxlength="11" v-model="registerForm.phone" placeholder="请输入手机号" />
           </div>
           <div class="inpbox mt2">
-            <input type="password" placeholder="请输入密码" />
+            <input type="password" v-model="registerForm.password" placeholder="请输入密码" />
           </div>
           <div class="inpbox mt2">
-            <input type="password" placeholder="请再次输入密码" />
+            <input type="password" v-model="registerForm.confirmPassword" placeholder="请再次输入密码" />
           </div>
         </div>
         <div :class="['action', model === 'register' ? 'mt2' : '']">
-          <div class="btn">{{model === 'login' ? '登录' : '注册'}}</div>
+          <div class="btn" @click="submit">{{model === 'login' ? '登录' : '注册'}}</div>
         </div>
         <div class="tips" @click="changeModel">
           <p>{{model === 'login' ? '没有账号？立即注册' : '已有账号，立即登录'}}</p>
@@ -45,11 +45,24 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import { HomeFilled } from "@ant-design/icons-vue";
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
+import { message } from "ant-design-vue";
+import http from '@/utils/http';
 const router = useRouter();
 // 页面类型 登录 || 注册
 type AuthAction = 'login' | 'register';
 const model = ref<AuthAction>('login');
+
+const loginForm = reactive({
+  phone: '13687093051',
+  password: '123456',
+})
+
+const registerForm = reactive({
+  phone: '',
+  password: '',
+  confirmPassword: '',
+})
 
 
 // 跳转首页
@@ -59,6 +72,30 @@ const goHome = () => {
 // 切换模式
 const changeModel = () => {
   model.value = model.value === 'login' ? 'register' : 'login';
+}
+
+// 提交表单
+const submit = async() => {
+  if(model.value === 'login') {
+    if(!loginForm.phone) {
+      message.error('手机号不能为空');
+    }
+    if(!loginForm.password) {
+      message.error('请输入正确的密码');
+    }
+    const res = await http.post('/api/login',loginForm);
+    if(res.data.data.userInfo[0].length) {
+      let info = res.data.data.userInfo[0][0];
+      window.localStorage.setItem('userInfo',JSON.stringify(info));
+      message.success('登录成功！');
+      goHome();
+    } else {
+      message.error('手机号或密码错误！')
+    }
+  } else {
+    await http.post('/api/register',registerForm);
+    model.value = 'login';
+  }
 }
 
 </script>

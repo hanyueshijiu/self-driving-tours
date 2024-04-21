@@ -1,22 +1,21 @@
 <template>
   <a-page-header
-      style="border: 1px solid rgb(235, 237, 240)"
-      title="个人信息设置"
-      sub-title="修改个人信息"
-      @back="() => router.back()"
-    />
+    style="border: 1px solid rgb(235, 237, 240)"
+    title="个人信息设置"
+    sub-title="修改个人信息"
+    @back="() => router.back()"
+  />
   <div class="container">
     <div class="formBox">
-      <a-form :model="formState" v-bind="layout" name="nest-messages" @finish="onFinish">
+      <a-form :model="formState" v-bind="layout"  @finish="onFinish">
         <!-- 手机 -->
-        <a-form-item name="mobile" label="手机">
+        <a-form-item name="phone" label="手机">
           <a-input
             v-if="isEdit"
-            v-model:value="formState.mobile"
+            v-model:value="formState.phone"
             type="number"
-            maxlength="11"
           />
-          <span v-else>{{ formState.mobile }}</span>
+          <span v-else>{{ formState.phone }}</span>
         </a-form-item>
 
         <!-- 姓名 -->
@@ -73,8 +72,9 @@
 <script lang="ts" setup>
 import dayjs from "dayjs";
 import type { Dayjs } from "dayjs";
-import { ref, reactive } from "vue";
-import { useRouter } from 'vue-router';
+import { ref, reactive, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import http from '@/utils/http';
 const router = useRouter();
 
 const layout = {
@@ -84,7 +84,7 @@ const layout = {
 
 interface FormState {
   name: string;
-  mobile: number | null;
+  phone: string;
   nickname: string;
   sex: "男" | "女";
   birthday: null | Dayjs;
@@ -92,9 +92,9 @@ interface FormState {
   introduction: string;
 }
 
-const formState = reactive<FormState>({
+let formState = reactive<FormState>({
   name: "",
-  mobile: null,
+  phone: "",
   nickname: "",
   sex: "男",
   birthday: null,
@@ -102,23 +102,32 @@ const formState = reactive<FormState>({
   introduction: "",
 });
 
+onMounted(() => {
+  const info = JSON.parse(window.localStorage.getItem("userInfo"));
+  formState = info;
+  console.log(formState);
+});
+
 let isEdit = ref<boolean>(false);
 
-const onFinish = (values: any) => {
+const onFinish = async(values: any) => {
   isEdit.value = !isEdit.value;
 
   if (isEdit.value) {
     return;
   }
 
-  console.log("Success:", values);
+  const mess = await http.post('/api/modifyInfo',formState);
+  const newInfo = await http.post('/api/getUserInfo',{phone: formState.phone});
+  formState = newInfo.data[0][0];
+  window.localStorage.setItem('userInfo',JSON.stringify(newInfo.data[0][0]));
 };
 </script>
 <style lang="less" scoped>
 .container {
   width: 100vw;
   height: 80vh;
-  background: linear-gradient(to bottom, #ADD8E6 0%, #FFFFFF 100%);
+  background: linear-gradient(to bottom, #add8e6 0%, #ffffff 100%);
   display: flex;
   justify-content: center;
   .formBox {

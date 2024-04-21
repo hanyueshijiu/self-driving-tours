@@ -4,11 +4,11 @@
       <div class="titleModule">
         <div class="title">热门目的地</div>
         <div class="hotCities">
-          <div class="city" v-for="(item, index) in 6" :key="index">
-            呼和浩特
+          <div :class="['city', item.city == current ? 'current' : '']" v-for="(item, index) in hotCity" :key="index">
+            {{ item.city }}
           </div>
         </div>
-        <div class="more">查看更多上海景点</div>
+        <div class="more">查看更多{{current}}景点</div>
       </div>
       <div class="mainMpdule">
         <div class="kindType">
@@ -17,7 +17,10 @@
           </div> -->
         </div>
         <div class="recommendSecnery">
-          <div class="scenery" v-for="(item, index) in 12" :key="index">拙政园</div>
+          <div class="scenery" v-for="(item, index) in currentScenery.slice(0,6)" :key="index" @click="goDetail(item.sid)">
+            <img :src="item.imgUrl" alt="">
+            <span class="name">{{item.sceneryName}}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -25,7 +28,36 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRouter } from 'vue-router';
+import http from '@/utils/http';
+
+const router = useRouter();
+
+const current = ref('苏州');
+
+const currentScenery = ref([]);
+
+const hotCity = ref([
+  { city: '南通' },
+  { city: '无锡' },
+  { city: '苏州' },
+  { city: '常州' },
+  { city: '上海' },
+  { city: '泰州' },
+  { city: '嘉兴' },
+])
+
+onMounted(async() => {
+  const currentSceneries = await http.post('/api/getSceneryByCity',{city: current.value});
+  if(currentSceneries.data.length) {
+    currentScenery.value = currentSceneries.data
+  };
+});
+
+const goDetail = (sid:string) => {
+  router.push({name: 'detail', query: {sid}})
+}
 </script>
 
 <style lang="less" scoped>
@@ -55,9 +87,16 @@ import { ref } from "vue";
         display: flex;
         cursor: pointer;
         .city {
+          margin: 0 .1rem;
           padding: 0 1rem;
         }
         .city:hover {
+          background: #03a9f4;
+          border-radius: 5px;
+          border: 1px solid #fff;
+          color: #fff;
+        }
+        .current {
           background: #03a9f4;
           border-radius: 5px;
           border: 1px solid #fff;
@@ -100,13 +139,25 @@ import { ref } from "vue";
         justify-content: center;
         gap: 10px;
         .scenery {
-          flex: 0 0 calc(25% - 10px);
+          flex: 0 0 calc(50% - 10px);
           height: calc(40rem / 3 - 10px);
           background-color: #fff; /* 背景色 */
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2),
             /* 主阴影 */ 0 6px 20px rgba(0, 0, 0, 0.19); /* 深层阴影，增加立体感 */
           padding: 10px; /* 内部间距 */
           box-sizing: border-box; /* 包括padding和border在内的宽高计算方式 */
+          position: relative;
+          cursor: pointer;
+          img{
+            width: 100%;
+          }
+          .name {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            color: red;
+            font-size: 1.2rem;
+          }
         }
       }
     }

@@ -14,18 +14,20 @@
       </div>
       <div class="userInfo">
         <div class="preStatus">
-          <div v-if="userName == ''">
-            <a-button type="primary">登录</a-button><a-button>注册</a-button>
+          <div v-if="!userInfo.phone">
+            <a-button type="primary" @click="loginout">登录</a-button
+            ><a-button>注册</a-button>
           </div>
-          <div v-else style="color: #03a9f4;">
+          <div v-else style="color: #03a9f4">
             <a-dropdown>
               <a class="ant-dropdown-link" @click.prevent>
-                {{`欢迎您，${userName}`}}
+                {{ `欢迎您，${userInfo.name || userInfo.phone}` }}
                 <DownOutlined />
               </a>
               <template #overlay>
                 <a-menu>
                   <a-menu-item @click="goMessage">修改信息</a-menu-item>
+                  <a-menu-item @click="goOrder">我的订单</a-menu-item>
                   <a-menu-item @click="loginout">退出登录</a-menu-item>
                 </a-menu>
               </template>
@@ -44,7 +46,7 @@
 </template>
 
 <script lang="ts" setup>
-import {  ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { DownOutlined } from "@ant-design/icons-vue";
 const router = useRouter();
@@ -66,29 +68,40 @@ const items = ref([
   {
     key: "/selfDriving/hotel",
     title: "酒店民宿",
-  }
+  },
 ]);
-const userName = ref("寒月十九");
-const changeType = (value:any) => {
+let userInfo = ref({});
+onMounted(() => {
+  if (window.localStorage.getItem("userInfo")) {
+    const info = JSON.parse(window.localStorage.getItem("userInfo"));
+    userInfo.value = info;
+  }
+});
+const changeType = (value: any) => {
   current.value = value.key;
   router.replace(value.key);
 };
 const goMessage = () => {
-  router.push('/message');
-}
+  router.push("/message");
+};
+
+const goOrder = () => {
+  router.push("/order");
+};
 
 const loginout = () => {
-  router.push('/login');
-}
+  window.localStorage.removeItem("userInfo");
+  router.push("/login");
+};
 
-let inputValue = ref('');
+let inputValue = ref("");
 
 const goSearch = () => {
-  console.log(route.path,'path');
+  console.log(route.path, "path");
   let searchValue = inputValue.value;
-  
-  router.push({name: 'search', query: { keyword: searchValue}});
-}
+
+  router.push({ name: "search", query: { keyword: searchValue } });
+};
 </script>
 
 <style lang="less" scoped>
@@ -100,8 +113,7 @@ const goSearch = () => {
   height: 18vh;
   z-index: 100;
   border: 1px solid #eee;
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 
-              0px 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 2px rgba(0, 0, 0, 0.24);
   box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
   border-radius: 5px;
   background-image: url(https://pic3.zhimg.com/80/v2-8d43b0b1b27c66362f4b085f8668e3b6_720w.webp);

@@ -3,7 +3,7 @@
     <div class="searchMain">
       <a-tabs v-model:activeKey="activeKey" size="large">
         <a-tab-pane key="1" tab="景点门票">
-          <ProductionList  />
+          <ProductionList :list="sceneries" type="scenery"  />
         </a-tab-pane>
         <a-tab-pane key="2" tab="酒店民宿">Content of Tab Pane 2</a-tab-pane>
       </a-tabs>
@@ -15,12 +15,21 @@
 import ProductionList from "../../components/productionList.vue";
 import { useRouter, useRoute } from "vue-router";
 import { ref, watchEffect } from 'vue';
+import http from '@/utils/http';
 const route = useRoute();
 const activeKey = ref('1');
 
-watchEffect(() => {
-  const params = route.query;
-  console.log("路由参数变化:", params);
+const sceneries = ref([]);
+
+watchEffect(async() => {
+  const { keyword } = route.query;
+  const currentSceneries = await http.post('/api/getSceneryByCity',{city: keyword});
+  if(currentSceneries.data.length) {
+    sceneries.value = currentSceneries.data
+  } else {
+    sceneries.value = []
+  }
+  console.log("景区列表:", currentSceneries);
 })
 
 </script>
@@ -30,7 +39,7 @@ watchEffect(() => {
   padding: 3rem 10rem;
   box-sizing: border-box;
   .searchMain {
-    width: 50vw;
+    width: 60vw;
     margin: 0 auto 3rem;
   }
 }

@@ -64,6 +64,11 @@ const constantRoutes: RouteRecordRaw[] = [
     meta: {title: "个人资料" }
   },
   {
+    path: '/order',
+    name: 'order',
+    component: () => import('../views/order/index.vue')
+  },
+  {
     path: '/',
     name: 'root',
     redirect: '/selfDriving',
