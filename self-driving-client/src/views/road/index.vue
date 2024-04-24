@@ -10,7 +10,7 @@
       </div>
       <!-- 地图模块(出行路线) -->
       <!-- startName, endName, dialogVisible -->
-      <MapContainer v-if="dialogVisible" :startName="startName" :endName="endName" />
+      <!-- <MapContainer v-if="dialogVisible" :startName="startName" :endName="endName" /> -->
       <!-- 热门推荐 -->
       <div class="hotRecommend">
         <h1>热门目的地</h1>
@@ -29,8 +29,8 @@ import { ref } from "vue";
 import MapContainer from '@/components/MapContainer.vue';
 const dialogVisible = ref<boolean>(false);
 
-const startName = ref("东方明珠");
-const endName = ref("和平饭店");
+const startName = ref("拙政园");
+const endName = ref("上海和平饭店");
 
 const change = () => {
   dialogVisible.value = !dialogVisible.value;

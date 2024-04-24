@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="map">
     <div id="container"></div>
     <div id="panel"></div>
   </div>
@@ -30,6 +30,10 @@ watch(dialogVisible, (newVal) => {
   }
 });
 
+window._AMapSecurityConfig = {
+    securityJsCode: "ce311e8f516e6cc651b80f0fbd9e43a2",
+  };
+
 //进行地图初始化
 function initMap() {
   AMapLoader.load({
@@ -43,10 +47,7 @@ function initMap() {
     version: "2.0", // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
     Loca: {
       version: "2.0.0",
-    },
-    security: {
-      sign: "ce311e8f516e6cc651b80f0fbd9e43a2", // 安全密钥
-    },
+    }
   })
     .then((AMap) => {
       map.value = new AMap.Map("container", {
@@ -95,13 +96,23 @@ function initMap() {
 </script>
 
 <style lang="less" scoped>
-#container {
+.map {
+  position: relative;
+  #container {
   padding: 0px;
   margin: 0px;
   width: 100%;
   height: 800px;
 }
-#route-panel {
-  margin-top: 20px;
+}
+
+#panel {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.8);
+  max-height: 90%;
+  overflow-y: auto;
+  top: 0;
+  right: 10px;
+  width: 250px;
 }
 </style>
