@@ -1,67 +1,98 @@
 <template>
-  <div id="container"></div>
-  <div id="route-panel"></div>
+  <div>
+    <div id="container"></div>
+    <div id="panel"></div>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch, toRefs } from "vue";
 import AMapLoader from "@amap/amap-jsapi-loader";
-import { AMap } from "@amap/amap-jsapi-loader"; // 引入类型定义
 
-const map = ref<AMap.Map | null>(null);
+const props = defineProps({
+  dialogVisible: Boolean,
+  startName: String,
+  endName: String,
+});
+const { startName, endName, dialogVisible } = toRefs(props);
+
+const map = ref(null);
+const driving = ref(null);
 
 onMounted(() => {
-  AMapLoader.load({
-    key: "71898eaa3134d6ab6aad47d1ffaceaae",
-    version: "2.0",
-    plugins: ["AMap.Geocoder", "AMap.Driving"] // 确保插件名正确
-  })
-  .then((AMap) => {
-    map.value = new AMap.Map("container", {
-      center: [116.397428, 39.90923],
-      zoom: 13
-    });
-    console.log("AMap and plugins loaded successfully"); // 确认地图和插件加载成功
-    searchRoute("北京", "上海");
-  })
-  .catch((e) => {
-    console.error("Failed to load AMap or plugins: ", e); // 提供详细的错误信息
-  });
+  initMap();
 });
 
-function searchRoute(startPoint: string, endPoint: string) {
-  if (!map.value) {
-    console.error("Map is not initialized");
-    return;
+// 监听对话框可见性变化
+watch(dialogVisible, (newVal) => {
+  if (newVal) {
+    initMap();
   }
+});
 
-  const geocoder = new AMap.Geocoder();
-  const driving = new AMap.Driving({
-    map: map.value,
-    panel: "route-panel"
-  });
+//进行地图初始化
+function initMap() {
+  AMapLoader.load({
+    key: "71898eaa3134d6ab6aad47d1ffaceaae", // 申请好的Web端开发者Key，首次调用 load 时必填
+    plugins: [
+      "AMap.AutoComplete",
+      "AMap.PlaceSearch",
+      "AMap.Driving",
+      "AMap.DragRoute",
+    ],
+    version: "2.0", // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
+    Loca: {
+      version: "2.0.0",
+    },
+    security: {
+      sign: "ce311e8f516e6cc651b80f0fbd9e43a2", // 安全密钥
+    },
+  })
+    .then((AMap) => {
+      map.value = new AMap.Map("container", {
+        //设置地图容器id
+        plugins: [
+          "AMap.AutoComplete",
+          "AMap.PlaceSearch",
+          "AMap.Driving",
+          "AMap.DragRoute",
+        ],
+        center: [113.08982, 28.32427], //地图中心点
+        zoom: 10, //地图显示的缩放级别
+      });
 
-  Promise.all([geocoder.getLocation(startPoint), geocoder.getLocation(endPoint)])
-    .then((results) => {
-      const [startGeo, endGeo] = results;
-      if (startGeo.geocodes.length && endGeo.geocodes.length) {
-        const startPos = startGeo.geocodes[0].location;
-        const endPos = endGeo.geocodes[0].location;
-        driving.search(
-          { type: "start", location: startPos },
-          { type: "end", location: endPos }
+      const goView = () => {
+        // eslint-disable-next-line no-undef
+        driving.value = new AMap.Driving({
+          map: map.value,
+          // 驾车路线规划策略，AMap.DrivingPolicy.LEAST_TIME是最快捷模式
+          policy: AMap.DrivingPolicy.LEAST_TIME,
+          // panel 指定将结构化的路线详情数据显示的对应的DOM上，传入值需是DOM的ID
+          panel: "panel",
+        });
+        // 根据起终点经纬度规划驾车导航路线
+        driving.value.search(
+          [
+            { keyword: props.startName, city: "全国" },
+            { keyword: props.endName, city: "全国" },
+          ],
+          function (status: any, result: any) {
+            // result 即是对应的驾车导航信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_DrivingResult
+            if (status === "complete") {
+              console.log("绘制驾车路线完成", result);
+            } else {
+              console.log("获取驾车数据失败：" + result);
+            }
+          }
         );
-        console.log("Route search initiated successfully"); // 确认路线搜索启动成功
-      } else {
-        console.error("Geocoding failed for one of the locations");
-      }
+      };
+      goView(); // 获取线路规划
     })
-    .catch((error) => {
-      console.error("Geocoding error:", error);
+    .catch((e) => {
+      console.log(e);
     });
 }
 </script>
-
 
 <style lang="less" scoped>
 #container {

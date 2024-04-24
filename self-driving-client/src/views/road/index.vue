@@ -9,7 +9,8 @@
         <div class="btn"><a-button type="dashed" @click="change">搜索</a-button></div>
       </div>
       <!-- 地图模块(出行路线) -->
-      <MapContainer v-if="show" />
+      <!-- startName, endName, dialogVisible -->
+      <MapContainer v-if="dialogVisible" :startName="startName" :endName="endName" />
       <!-- 热门推荐 -->
       <div class="hotRecommend">
         <h1>热门目的地</h1>
@@ -26,9 +27,13 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import MapContainer from '@/components/MapContainer.vue';
-const show = ref<boolean>(false);
+const dialogVisible = ref<boolean>(false);
+
+const startName = ref("东方明珠");
+const endName = ref("和平饭店");
+
 const change = () => {
-  show.value = !show.value;
+  dialogVisible.value = !dialogVisible.value;
 };
 
 
