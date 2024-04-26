@@ -97,9 +97,8 @@ const loginout = () => {
 let inputValue = ref("");
 
 const goSearch = () => {
-  console.log(route.path, "path");
   let searchValue = inputValue.value;
-
+  if(searchValue === '') return;
   router.push({ name: "search", query: { keyword: searchValue } });
 };
 </script>

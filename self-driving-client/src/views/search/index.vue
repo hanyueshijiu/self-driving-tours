@@ -5,7 +5,9 @@
         <a-tab-pane key="1" tab="景点门票">
           <ProductionList :list="sceneries" type="scenery"  />
         </a-tab-pane>
-        <a-tab-pane key="2" tab="酒店民宿">Content of Tab Pane 2</a-tab-pane>
+        <a-tab-pane key="2" tab="酒店民宿">
+          <ProductionList :list="sceneries" type="hotel"  />
+        </a-tab-pane>
       </a-tabs>
     </div>
   </div>
@@ -13,7 +15,7 @@
 
 <script lang="ts" setup>
 import ProductionList from "../../components/productionList.vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 import { ref, watchEffect } from 'vue';
 import http from '@/utils/http';
 const route = useRoute();

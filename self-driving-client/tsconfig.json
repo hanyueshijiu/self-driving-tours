@@ -5,9 +5,9 @@
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
-      "*": ["src/*", "node_modules/*"]
+      "@/*": ["src/*", "node_modules/*"]
     },
 
     /* Bundler mode */

@@ -36,7 +36,7 @@
         </div>
         <div class="recommendImg">
           <img
-            src="https://pavo.elongstatic.com/i/Hotel600_320/nw_YJ0il0OWEo.jpg"
+            src="https://pic5.40017.cn/i/ori/1mvA1zdaEgw.png"
             alt=""
           />
         </div>
@@ -44,7 +44,7 @@
       <div class="recommend">
         <div class="title">为你推荐</div>
         <div class="list">
-          <div class="item" v-for="(item,index) in 12" :key="index"></div>
+          <div class="item" v-for="(item,index) in 3" :key="index"></div>
         </div>
       </div>
     </div>
@@ -192,7 +192,7 @@ const filterOption = (input: string, option: any) => {
           width: 100%; /* 设置图片宽度为容器宽度 */
           height: 100%; /* 设置图片高度为容器高度 */
           object-fit: cover; /* 保持图片宽高比，放大并裁剪以填充容器 */
-          object-position: center; /* 确保图片的中心与容器的中心对齐 */
+          object-position: 67%; /* 确保图片的中心与容器的中心对齐 */
           border-radius: 5px;
         }
       }
@@ -207,10 +207,10 @@ const filterOption = (input: string, option: any) => {
       .list {
         display: flex;
         flex-wrap: wrap; /* 允许子项换行 */
-        justify-content: flex-start; /* 子项左对齐，可以根据需要调整 */
+        justify-content: center; /* 子项左对齐，可以根据需要调整 */
         gap: 20px; /* 子项之间的间距 */
         .item {
-          flex: 0 0 calc(25% - 20px); /* 每个子项占行宽的25%，减去间距 */
+          flex: 0 0 calc(33% - 20px); /* 每个子项占行宽的25%，减去间距 */
           height: 20rem; /* 高度，可以根据实际需要调整 */
           background-color: #fff; /* 背景色 */
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2),

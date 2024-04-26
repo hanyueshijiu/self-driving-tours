@@ -4,8 +4,8 @@
       <!-- 搜索模块 -->
       <div class="searchBox">
         <div class="title">定制你的专属路线</div>
-        <div class="start">起点：<input type="text"></div>
-        <div class="start">目的地：<input type="text"></div>
+        <div class="start">起点：<input v-model="startName" type="text"></div>
+        <div class="start">目的地：<input v-model="endName" type="text"></div>
         <div class="btn"><a-button type="dashed" @click="change">搜索</a-button></div>
       </div>
       <!-- 地图模块(出行路线) -->
@@ -29,8 +29,8 @@ import { ref } from "vue";
 import MapContainer from '@/components/MapContainer.vue';
 const dialogVisible = ref<boolean>(false);
 
-const startName = ref("拙政园");
-const endName = ref("上海和平饭店");
+const startName = ref('');
+const endName = ref('');
 
 const change = () => {
   dialogVisible.value = !dialogVisible.value;

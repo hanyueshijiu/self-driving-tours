@@ -14,7 +14,7 @@ const props = defineProps({
   startName: String,
   endName: String,
 });
-const { startName, endName, dialogVisible } = toRefs(props);
+const { dialogVisible } = toRefs(props);
 
 const map = ref(null);
 const driving = ref(null);
@@ -31,23 +31,18 @@ watch(dialogVisible, (newVal) => {
 });
 
 window._AMapSecurityConfig = {
-    securityJsCode: "ce311e8f516e6cc651b80f0fbd9e43a2",
-  };
+  securityJsCode: "ce311e8f516e6cc651b80f0fbd9e43a2",
+};
 
 //进行地图初始化
 function initMap() {
   AMapLoader.load({
     key: "71898eaa3134d6ab6aad47d1ffaceaae", // 申请好的Web端开发者Key，首次调用 load 时必填
-    plugins: [
-      "AMap.AutoComplete",
-      "AMap.PlaceSearch",
-      "AMap.Driving",
-      "AMap.DragRoute",
-    ],
+    plugins: ["AMap.AutoComplete", "AMap.PlaceSearch", "AMap.Driving", "AMap.DragRoute"],
     version: "2.0", // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
     Loca: {
       version: "2.0.0",
-    }
+    },
   })
     .then((AMap) => {
       map.value = new AMap.Map("container", {
@@ -58,7 +53,6 @@ function initMap() {
           "AMap.Driving",
           "AMap.DragRoute",
         ],
-        center: [113.08982, 28.32427], //地图中心点
         zoom: 10, //地图显示的缩放级别
       });
 
@@ -72,7 +66,7 @@ function initMap() {
           panel: "panel",
         });
         // 根据起终点经纬度规划驾车导航路线
-        driving.value.search(
+        driving.value?.search(
           [
             { keyword: props.startName, city: "全国" },
             { keyword: props.endName, city: "全国" },
@@ -99,11 +93,11 @@ function initMap() {
 .map {
   position: relative;
   #container {
-  padding: 0px;
-  margin: 0px;
-  width: 100%;
-  height: 800px;
-}
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    height: 800px;
+  }
 }
 
 #panel {

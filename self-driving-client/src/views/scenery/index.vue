@@ -4,11 +4,16 @@
       <div class="titleModule">
         <div class="title">热门目的地</div>
         <div class="hotCities">
-          <div :class="['city', item.city == current ? 'current' : '']" v-for="(item, index) in hotCity" :key="index">
+          <div
+            :class="['city', item.city == current ? 'current' : '']"
+            v-for="(item, index) in hotCity"
+            :key="index"
+            @click="changeCity(item.city)"
+          >
             {{ item.city }}
           </div>
         </div>
-        <div class="more">查看更多{{current}}景点</div>
+        <div class="more" @click="goMore(current)">查看更多{{ current }}景点</div>
       </div>
       <div class="mainMpdule">
         <div class="kindType">
@@ -17,9 +22,14 @@
           </div> -->
         </div>
         <div class="recommendSecnery">
-          <div class="scenery" v-for="(item, index) in currentScenery.slice(0,6)" :key="index" @click="goDetail(item.sid)">
-            <img :src="item.imgUrl" alt="">
-            <span class="name">{{item.sceneryName}}</span>
+          <div
+            class="scenery"
+            v-for="(item, index) in currentScenery.slice(0, 6)"
+            :key="index"
+            @click="goDetail(item.sid)"
+          >
+            <img :src="item.imgUrl" alt="" />
+            <span class="name">{{ item.sceneryName }}</span>
           </div>
         </div>
       </div>
@@ -29,35 +39,56 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
-import { useRouter } from 'vue-router';
-import http from '@/utils/http';
+import { useRouter } from "vue-router";
+import http from "@/utils/http";
 
 const router = useRouter();
 
-const current = ref('苏州');
+const current = ref("苏州");
 
 const currentScenery = ref([]);
 
 const hotCity = ref([
-  { city: '南通' },
-  { city: '无锡' },
-  { city: '苏州' },
-  { city: '常州' },
-  { city: '上海' },
-  { city: '泰州' },
-  { city: '嘉兴' },
-])
+  { city: "南通" },
+  { city: "无锡" },
+  { city: "苏州" },
+  { city: "常州" },
+  { city: "上海" },
+  { city: "常州" },
+  { city: "嘉兴" },
+]);
 
-onMounted(async() => {
-  const currentSceneries = await http.post('/api/getSceneryByCity',{city: current.value});
-  if(currentSceneries.data.length) {
-    currentScenery.value = currentSceneries.data
-  };
+onMounted(async () => {
+  await getSceneries();
 });
 
-const goDetail = (sid:string) => {
-  router.push({name: 'detail', query: {sid}})
-}
+// 切换城市
+const changeCity = async (city: string) => {
+  current.value = city;
+  await getSceneries();
+};
+
+// 跳转详情页
+const goDetail = (sid: string) => {
+  router.push({ name: "detail", query: { sid } });
+};
+
+// 查看更多城市景点
+const goMore = (keyword: string): void => {
+  router.push({ name: "search", query: { keyword: keyword } });
+};
+
+// 获取景区信息
+const getSceneries = async () => {
+  const currentSceneries = await http.post("/api/getSceneryByCity", {
+    city: current.value,
+  });
+  if (currentSceneries.data.length) {
+    currentScenery.value = currentSceneries.data;
+  } else {
+    currentScenery.value = [];
+  }
+};
 </script>
 
 <style lang="less" scoped>
@@ -74,8 +105,7 @@ const goDetail = (sid:string) => {
       line-height: 5vh;
       display: flex;
       padding: 0 2rem;
-      box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12),
-        0px 1px 2px rgba(0, 0, 0, 0.24);
+      box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 2px rgba(0, 0, 0, 0.24);
       .title {
         font-size: 1.8rem;
         margin-right: 2rem;
@@ -87,7 +117,7 @@ const goDetail = (sid:string) => {
         display: flex;
         cursor: pointer;
         .city {
-          margin: 0 .1rem;
+          margin: 0 0.1rem;
           padding: 0 1rem;
         }
         .city:hover {
@@ -148,7 +178,7 @@ const goDetail = (sid:string) => {
           box-sizing: border-box; /* 包括padding和border在内的宽高计算方式 */
           position: relative;
           cursor: pointer;
-          img{
+          img {
             width: 100%;
           }
           .name {
