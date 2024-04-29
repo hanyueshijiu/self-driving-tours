@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const dbOperations = require('../dbOperations');
+const dbOperations = require('../services/userService');
 
 // 登录
 router.post('/login', async (req, res) => {
