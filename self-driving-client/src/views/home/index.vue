@@ -3,7 +3,35 @@
     <!-- 旅游路线推荐 -->
     <div class="travelRecommend">
       <div class="title">热门自驾游</div>
-      <div class="recommendList">
+      <div class="recommendList" v-if="recommendCity.length">
+        <div class="recommendItem" v-for="(item,index) in recommendCity" :key="index">
+          <div class="unevenItem">
+            <img
+              :src="item.image[0]"
+              alt=""
+            />
+            <div class="textBox">
+              <div class="recommendTitle">{{ item.title }}</div>
+              <div class="recommendDesc">
+                <span>{{  item.content  }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="recommendItem">
+          <div class="unevenItem">
+            <div class="textBox">
+              <div class="recommendTitle">山东青岛 自由行</div>
+              <div class="recommendDesc">
+                青岛崂山环海公路，位于山东省青岛市崂山区，全长26公里，面向黄海，背靠崂山，绝美的景色让人流连忘返。
+              </div>
+            </div>
+            <img
+              src="https://pic3.zhimg.com/v2-bcf4266b4b219d207ba526c56394f5ca_r.jpg"
+              alt=""
+            />
+          </div>
+        </div>
         <div class="recommendItem">
           <div class="unevenItem">
             <img
@@ -14,39 +42,11 @@
               <div class="recommendTitle">山东青岛 自由行</div>
               <div class="recommendDesc">
                 青岛崂山环海公路，位于山东省青岛市崂山区，全长26公里，面向黄海，背靠崂山，绝美的景色让人流连忘返。
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="recommendItem">
-          <div class="unevenItem">
-            <div class="textBox">
-              <div class="recommendTitle">山东青岛 自由行</div>
-              <div class="recommendDesc">
-                青岛崂山环海公路，位于山东省青岛市崂山区，全长26公里，面向黄海，背靠崂山，绝美的景色让人流连忘返。
-              </div>
-            </div>
-            <img
-              src="https://pic3.zhimg.com/v2-bcf4266b4b219d207ba526c56394f5ca_r.jpg"
-              alt=""
-            />
-          </div>
-        </div>
-        <div class="recommendItem">
-          <div class="unevenItem">
-            <img
-              src="https://pic3.zhimg.com/v2-bcf4266b4b219d207ba526c56394f5ca_r.jpg"
-              alt=""
-            />
-            <div class="textBox">
-              <div class="recommendTitle">山东青岛 自由行</div>
-              <div class="recommendDesc">
-                青岛崂山环海公路，位于山东省青岛市崂山区，全长26公里，面向黄海，背靠崂山，绝美的景色让人流连忘返。
                 青岛崂山环海公路，位于山东省青岛市崂山区，全长26公里，面向黄海，背靠崂山，绝美的景色让人流连忘返。
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <!-- 景点推荐 -->
@@ -73,11 +73,21 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute } from 'vue-router';
+import http from "@/utils/http";
 
+const recommendCity = ref([]);
 
 const route = useRoute();
+
+onMounted(async() => {
+  const notes = await http.get('/note/getAll');
+  if(notes.data && notes.data.length) {
+    recommendCity.value = notes.data
+  };
+  console.log(notes,'notes');
+})
 </script>
 
 <style lang=less scoped>
@@ -116,14 +126,15 @@ const route = useRoute();
         .textBox {
           padding: 1rem;
           box-sizing: border-box;
-          height: calc(58vh - 22rem);
+          height: calc(58vh - 21rem);
+          overflow: hidden;
           .recommendTitle {
             font-size: 1.2rem;
           }
           .recommendDesc {
             margin-top: 1.5rem;
             font-size: .8rem;
-
+            overflow: hidden;
           }
         }
       }

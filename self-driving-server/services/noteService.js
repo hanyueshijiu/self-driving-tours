@@ -1,6 +1,15 @@
 // 包含业务逻辑，与模型层交互
 const db = require('../config/dbConfig');
 
+function convertPathToLocalUrl(pathArray) {
+  return pathArray.map(path => {
+    // 使用正则表达式提取文件名，支持多种图片格式
+    const filename = path.match(/[^\\]*\.(jpg|png|jpeg|gif|bmp)$/i)[0];
+    // 构建新的 URL
+    return `http://localhost:3000/${filename}`;
+  });
+}
+
 class NoteService {
   // 发布笔记
   static async addNote(title, content, images) {
@@ -30,7 +39,7 @@ class NoteService {
     const [result] = await db.execute(sql);
     return result.map(note => ({
       ...note,
-      image: note.images ? note.image.split(',') : []
+      image: note.images ? convertPathToLocalUrl(note.images.split(',')) : []
     }));
   }
 

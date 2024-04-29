@@ -10,5 +10,6 @@ app.use(cors());  // 允许跨域
 app.use(bodyParser.json()); // 解析parse
 app.use('/api', userRoutes);
 app.use('/note', noteRoutes);
+app.use(express.static('uploads'));
 
 module.exports = app;
