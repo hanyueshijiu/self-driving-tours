@@ -45,6 +45,11 @@ export const accessRoutes: RouteRecordRaw[] = [
         name: 'detail',
         component: () => import('../views/detail/index.vue')
       },
+      {
+        path: '/selfDriving/uploadStrategy',
+        name: 'uploadStrategy',
+        component: () => import('../views/strategy/index.vue')
+      },
     ]
   }
 ]

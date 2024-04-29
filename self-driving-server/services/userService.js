@@ -111,7 +111,6 @@ async function getSceneryByCity(userData) {
     );
 
     // 输出结果
-    console.log(rows,`${city}对应的景区`);
     return rows;
   } catch (error) {
     console.error('Failed to retrieve data:', error);
@@ -131,7 +130,6 @@ async function getSceneryBySid(userData) {
     );
 
     // 输出结果
-    console.log(rows,`${sid}对应的景区`);
     return rows;
   } catch (error) {
     console.error('Failed to retrieve data:', error);

@@ -47,7 +47,7 @@ const submitNote = async() => {
   }
 
   try {
-    await http.post('/api/submitNote',formData, {
+    await http.post('/note/uploadNote',formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

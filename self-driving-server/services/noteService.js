@@ -8,9 +8,12 @@ class NoteService {
     const insertNoteSql = 'INSERT INTO notes (title, content) VALUES (?, ?)';
     const [noteResult] = await db.execute(insertNoteSql, [title, content]);
 
+    // 获取新添加的笔记的ID
+    const noteId = noteResult.insertId;
+
     // 保存每个图片信息到数据库
     const insertImageSql = 'INSERT INTO images (note_id, filepath) VALUES (?, ?)';
-    const imagePromises = images.map(image => db.execute(insertImageSql, image));
+    const imagePromises = images.map(image => db.execute(insertImageSql, [noteId, image]));
     await Promise.all(imagePromises);
 
     return noteResult.insertId;
@@ -40,8 +43,8 @@ class NoteService {
       WHERE n.id = ?
       GROUP BY n.id
     `;
-    const [results] = await db.execute(sql,noteId);
-    if(results.length) {
+    const [results] = await db.execute(sql, noteId);
+    if (results.length) {
       const note = results[0];
       return {
         ...note,
