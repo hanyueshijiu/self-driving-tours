@@ -37,7 +37,6 @@ exports.getNoteById = async (req, res) => {
 // 获取所有笔记
 exports.getAllNotes = async(req, res) => {
   try {
-    console.log('获取所有笔记')
     const notes = await NoteService.getAllNotes();
     res.status(200).json(notes);
   } catch (error) {

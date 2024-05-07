@@ -3,22 +3,21 @@ const db = require('../config/dbConfig');
 // 获取个人信息sql
 async function getUserInfo(userData) {
   const { phone } = userData;
-  const userInfo = await db.query('SELECT * FROM UserInfo WHERE phone = ?',phone);
+  const userInfo = await db.query('SELECT * FROM userinfo WHERE phone = ?;',[phone]);
   return userInfo;
 }
 
 // 修改个人信息sql
 async function modifyUserInfo(userData) {
   const { phone, name, nickname, email, sex, birthday, introduction } = userData;
-
   // 首先检查电话号码是否存在
   const checkSql = 'SELECT phone FROM UserInfo WHERE phone = ?;';
   try {
     const [users] = await db.query(checkSql, [phone]);
     if (users.length > 0) {
       // 电话号码存在，执行更新操作
-      const updateSql = 'UPDATE UserInfo SET name = ?, nickname = ?, email = ? WHERE phone = ?;';
-      const [updateResult] = await db.query(updateSql, [name, nickname, email, phone]);
+      const updateSql = 'UPDATE UserInfo SET name = ?, nickname = ?, email = ?, sex = ?, birthday = ?, introduction = ? WHERE phone = ?;';
+      const [updateResult] = await db.query(updateSql, [name, nickname, email , sex, birthday, introduction, phone]);
       if (updateResult.affectedRows > 0) {
         return { success: true, message: 'User info updated successfully.' };
       } else {
@@ -43,7 +42,6 @@ async function login(userData) {
 
   try {
     const [user] = await db.query(sql, [phone, password]);
-    console.log(user,'user');
     if (user.length > 0) {
       // 如果查询结果存在，表示登录成功
       return { success: true, message: 'Login successful.' };

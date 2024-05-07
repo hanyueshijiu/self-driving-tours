@@ -21,7 +21,7 @@
           <div v-else style="color: #03a9f4">
             <a-dropdown>
               <a class="ant-dropdown-link" @click.prevent>
-                {{ `欢迎您，${userInfo.name || userInfo.phone}` }}
+                {{ `欢迎您，${userInfo.nickname || userInfo.name || userInfo.phone}` }}
                 <DownOutlined />
               </a>
               <template #overlay>
@@ -98,7 +98,7 @@ let inputValue = ref("");
 
 const goSearch = () => {
   let searchValue = inputValue.value;
-  if(searchValue === '') return;
+  if (searchValue === "") return;
   router.push({ name: "search", query: { keyword: searchValue } });
 };
 </script>

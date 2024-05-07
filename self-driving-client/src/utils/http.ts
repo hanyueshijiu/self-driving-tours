@@ -16,7 +16,7 @@ http.interceptors.request.use(
     // config.headers.Authorization = `Bearer ${token}`;
     
     // 操作请求配置
-    console.log('Request Interceptor:', config);
+    // console.log('Request Interceptor:', config);
     return config;
   },
   error => {
@@ -29,7 +29,7 @@ http.interceptors.request.use(
 http.interceptors.response.use(
   response => {
     // 对响应数据做点什么
-    console.log('Response Interceptor:', response);
+    // console.log('Response Interceptor:', response);
     return response;
   },
   error => {

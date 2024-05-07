@@ -35,16 +35,15 @@
           </div>
         </div>
         <div class="recommendImg">
-          <img
-            src="https://pic5.40017.cn/i/ori/1mvA1zdaEgw.png"
-            alt=""
-          />
+          <img src="https://pic5.40017.cn/i/ori/1mvA1zdaEgw.png" alt="" />
         </div>
       </div>
       <div class="recommend">
         <div class="title">为你推荐</div>
         <div class="list">
-          <div class="item" v-for="(item,index) in 3" :key="index"></div>
+          <div class="item" v-for="(item, index) in 3" :key="index">
+            <span>大隐国际青年旅舍(上海东方明珠陆家嘴店) </span>
+          </div>
         </div>
       </div>
     </div>
@@ -110,7 +109,7 @@ const filterOption = (input: string, option: any) => {
 };
 </script>
 
-<style lang=less scoped>
+<style lang="less" scoped>
 .container {
   padding: 3rem 10rem;
   box-sizing: border-box;
@@ -218,6 +217,7 @@ const filterOption = (input: string, option: any) => {
           padding: 10px; /* 内部间距 */
           border-radius: 5px;
           box-sizing: border-box; /* 包括padding和border在内的宽高计算方式 */
+          background-image: url(https://pavo.elongstatic.com/i/Mobile720_720/nw_1kmB487h6Lu.jpg);
         }
       }
     }

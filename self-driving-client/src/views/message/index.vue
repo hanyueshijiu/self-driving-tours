@@ -1,20 +1,12 @@
 <template>
-  <a-page-header
-    style="border: 1px solid rgb(235, 237, 240)"
-    title="个人信息设置"
-    sub-title="修改个人信息"
-    @back="() => router.back()"
-  />
+  <a-page-header style="border: 1px solid rgb(235, 237, 240)" title="个人信息设置" sub-title="修改个人信息"
+    @back="() => router.back()" />
   <div class="container">
     <div class="formBox">
-      <a-form :model="formState" v-bind="layout"  @finish="onFinish">
+      <a-form :model="formState" v-bind="layout" @finish="onFinish">
         <!-- 手机 -->
         <a-form-item name="phone" label="手机">
-          <a-input
-            v-if="isEdit"
-            v-model:value="formState.phone"
-            type="number"
-          />
+          <a-input v-if="isEdit" v-model:value="formState.phone" type="number" />
           <span v-else>{{ formState.phone }}</span>
         </a-form-item>
 
@@ -71,10 +63,9 @@
 </template>
 <script lang="ts" setup>
 import dayjs from "dayjs";
-import type { Dayjs } from "dayjs";
-import { ref, reactive, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import http from '@/utils/http';
+import http from "@/utils/http";
 const router = useRouter();
 
 const layout = {
@@ -87,12 +78,12 @@ interface FormState {
   phone: string;
   nickname: string;
   sex: "男" | "女";
-  birthday: null | Dayjs;
+  birthday: any;
   email: string;
   introduction: string;
 }
 
-let formState = reactive<FormState>({
+let formState = ref<FormState>({
   name: "",
   phone: "",
   nickname: "",
@@ -104,23 +95,28 @@ let formState = reactive<FormState>({
 
 onMounted(() => {
   const info = JSON.parse(window.localStorage.getItem("userInfo"));
-  formState = info;
-  console.log(formState);
+  formState.value = info;
+  formState.value.birthday = dayjs(info.birthday, "YYYY-MM-DD");
 });
 
 let isEdit = ref<boolean>(false);
 
-const onFinish = async(values: any) => {
+const onFinish = async (values: any) => {
   isEdit.value = !isEdit.value;
 
   if (isEdit.value) {
-    return;
+    if (formState.value.birthday) {
+      formState.value.birthday = dayjs(values.birthday, "YYYY-MM-DD");
+    }
+    await http.post("/api/modifyInfo", values);
+    const newInfo = await http.post("/api/getUserInfo", { phone: formState.value.phone });
+    formState.value = newInfo.data[0][0];
+    window.localStorage.setItem("userInfo", JSON.stringify(newInfo.data[0][0]));
   }
-
-  const mess = await http.post('/api/modifyInfo',formState);
-  const newInfo = await http.post('/api/getUserInfo',{phone: formState.phone});
-  formState = newInfo.data[0][0];
-  window.localStorage.setItem('userInfo',JSON.stringify(newInfo.data[0][0]));
+  try {
+  } catch (error) {
+    console.error(error, '错误信息')
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -130,6 +126,7 @@ const onFinish = async(values: any) => {
   background: linear-gradient(to bottom, #add8e6 0%, #ffffff 100%);
   display: flex;
   justify-content: center;
+
   .formBox {
     width: 40vw;
     padding: 5rem;

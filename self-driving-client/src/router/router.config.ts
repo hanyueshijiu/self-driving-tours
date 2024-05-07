@@ -11,44 +11,58 @@ export const accessRoutes: RouteRecordRaw[] = [
     meta: {title: '自驾游平台'},
     children: [
       {
+        // 首页
         path: '/selfDriving/home',
         name: 'home',
         component: Home
       },
       {
+        // 路线规划
         path: '/selfDriving/road',
         name: 'road',
         component: () => import('../views/road/index.vue')
       },
       {
+        // 景点门票
         path: '/selfDriving/scenery',
         name: 'scenery',
         component: () => import('../views/scenery/index.vue')
       },
       {
+        // 酒店民宿
         path: '/selfDriving/hotel',
         name: 'hotel',
         component: () => import('../views/hotel/index.vue')
       },
       {
+        // 待定
         path: '/selfDriving/evaluate',
         name: 'evaluate',
         component: () => import('../views/evaluate/index.vue')
       },
       {
+        // 搜索
         path: '/selfDriving/search',
         name: 'search',
         component: () => import('../views/search/index.vue')
       },
       {
+        // 景区&酒店详情页
         path: '/selfDriving/detail',
         name: 'detail',
         component: () => import('../views/detail/index.vue')
       },
       {
+        // 发布旅游攻略
         path: '/selfDriving/uploadStrategy',
         name: 'uploadStrategy',
         component: () => import('../views/strategy/index.vue')
+      },
+      {
+        // 笔记详情页
+        path: '/selfDriving/note',
+        name: 'note',
+        component: () => import('../views/note/index.vue')
       },
     ]
   }
