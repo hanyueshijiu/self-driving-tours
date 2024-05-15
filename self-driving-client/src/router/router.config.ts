@@ -2,13 +2,13 @@ import { RouteRecordRaw } from "vue-router";
 const Layout = () => import('../layout/Layout.vue');
 const Home = () => import('../views/home/index.vue');
 // 实际的主要的路由
-export const accessRoutes: RouteRecordRaw[] = [  
+export const accessRoutes: RouteRecordRaw[] = [
   {
     path: '/selfDriving',
     name: 'selfDriving',
     redirect: '/selfDriving/home',
     component: Layout,
-    meta: {title: '自驾游平台'},
+    meta: { title: '自驾游平台' },
     children: [
       {
         // 首页
@@ -70,17 +70,17 @@ export const accessRoutes: RouteRecordRaw[] = [
 
 const Login = import("../views/login/index.vue");
 // 与项目实际不太相关的路由以及重定向
-const constantRoutes: RouteRecordRaw[] = [        
+const constantRoutes: RouteRecordRaw[] = [
   {
     path: "/login",
     name: "login",
     component: () => Login,
-    meta: {title: "登录" }
-  },{
+    meta: { title: "登录" }
+  }, {
     path: "/message",
     name: "message",
     component: () => import("../views/message/index.vue"),
-    meta: {title: "个人资料" }
+    meta: { title: "个人资料" }
   },
   {
     path: '/order',
@@ -88,10 +88,15 @@ const constantRoutes: RouteRecordRaw[] = [
     component: () => import('../views/order/index.vue')
   },
   {
+    path: '/manage',
+    name: 'manage',
+    component: () => import('../views/manage/index.vue')
+  },
+  {
     path: '/',
     name: 'root',
     redirect: '/selfDriving',
-    meta: {title: 'Root'}
+    meta: { title: 'Root' }
   },
   ...accessRoutes,
 ]

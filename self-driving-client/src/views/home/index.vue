@@ -103,10 +103,7 @@ const goDetail = (sid: string) => {
 };
 
 // 打开攻略详情
-const chooseNote = (item) => {
-  console.log('====================================');
-  console.log(item,'item');
-  console.log('====================================');
+const chooseNote = (item:any) => {
   chooseItem.value = item;
   open.value = true;
 };
@@ -139,15 +136,13 @@ const chooseNote = (item) => {
 
       .recommendItem {
         width: 20vw;
-        height: calc(58vh - 8rem);
         display: flex;
         justify-content: space-around;
         border: 1px solid #eee;
         border-radius: 15px;
-
         img {
           width: 20vw;
-          height: 25vh;
+          height: 45vh;
           border-radius: 15px;
         }
 

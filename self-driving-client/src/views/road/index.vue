@@ -15,7 +15,7 @@
       <div class="hotRecommend">
         <h1>热门目的地</h1>
         <div class="hotList">
-          <div class="hotCity" v-for="(item, index) in hotDestination" :key="index">
+          <div class="hotCity" v-for="(item, index) in hotDestination" :key="index" @click="goSearch(item.city)">
             <img :src="item.imgUrl" /><span>{{ item.city }}</span>
           </div>
         </div>
@@ -27,8 +27,9 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import MapContainer from "@/components/MapContainer.vue";
+import { useRouter } from "vue-router";
 const dialogVisible = ref<boolean>(false);
-
+const router = useRouter();
 // 起点
 const startName = ref("");
 // 终点
@@ -81,6 +82,10 @@ const hotDestination = ref([
 const change = () => {
   dialogVisible.value = !dialogVisible.value;
 };
+
+const goSearch = (keyword: string) => {
+  router.push({ name: "search", query: { keyword: keyword } });
+}
 </script>
 
 <style lang="less" scoped>

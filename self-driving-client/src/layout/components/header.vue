@@ -28,6 +28,7 @@
                 <a-menu>
                   <a-menu-item @click="goMessage">修改信息</a-menu-item>
                   <a-menu-item @click="goOrder">我的订单</a-menu-item>
+                  <a-menu-item @click="goManage">我的商铺</a-menu-item>
                   <a-menu-item @click="loginout">退出登录</a-menu-item>
                 </a-menu>
               </template>
@@ -47,10 +48,9 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { DownOutlined } from "@ant-design/icons-vue";
 const router = useRouter();
-const route = useRoute();
 const current = ref<string>("/selfDriving/home");
 const items = ref([
   {
@@ -77,10 +77,12 @@ onMounted(() => {
     userInfo.value = info;
   }
 });
+
 const changeType = (value: any) => {
   current.value = value.key;
   router.replace(value.key);
 };
+
 const goMessage = () => {
   router.push("/message");
 };
@@ -88,6 +90,10 @@ const goMessage = () => {
 const goOrder = () => {
   router.push("/order");
 };
+
+const goManage = () => {
+  router.push('/manage');
+}
 
 const loginout = () => {
   window.localStorage.removeItem("userInfo");

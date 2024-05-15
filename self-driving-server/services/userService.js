@@ -135,11 +135,150 @@ async function getSceneryBySid(userData) {
   }
 }
 
+// sid获取景区评论
+async function getCommentBySid(userData) {
+  const { sid } = userData;
+
+  try {
+    // 执行查询并获取结果
+    const [rows] = await db.query(
+      'SELECT * FROM scenery_comment WHERE sid = ?',
+      [sid]
+    );
+
+    // 输出结果
+    return rows;
+  } catch (error) {
+    console.error('Failed to retrieve data:', error);
+    throw error; // 重新抛出错误，允许调用者处理异常
+  }
+}
+
+// 发布评论
+async function publishComment(commentData) {
+  const {user_id, nick_name, sid, comment_content, publish_time  } = commentData;
+  const sql = `
+    INSERT INTO scenery_comment (
+      user_id, nick_name, sid, comment_content, publish_time, is_anonymity
+    ) VALUES (?, ?, ?, ?, ?, ?);
+  `;
+  try {
+    const [result] = await db.query(sql, [user_id, nick_name, sid, comment_content, publish_time, false]);
+    return result;
+  } catch (insertError) {
+    console.error('Error adding user:', insertError);
+    throw insertError;
+  }
+}
+
+// 获取商铺信息
+async function getStoreInfo(userData) {
+  const { user_id } = userData;
+  const sql = `SELECT * FROM scenery WHERE user_id = ?`;
+  try {
+    const [result] = await db.query(sql,[user_id]);
+    // console.log(result, 'result');
+    return result;
+  } catch (error) {
+    onsole.error('Failed to retrieve data:', error);
+    throw error; // 重新抛出错误，允许调用者处理异常
+  }
+}
+
+// 获取景区库存
+async function getSceneryStock(data) {
+  const { sid } = data;
+  const sql = `SELECT * FROM scenery_stock WHERE sid = ?`;
+  try {
+    const [result] = await db.query(sql,[sid]);
+    // console.log(result, 'result');
+    return result;
+  } catch (error) {
+    onsole.error('Failed to retrieve data:', error);
+    throw error; // 重新抛出错误，允许调用者处理异常
+  }
+}
+
+// 提交景区订单
+async function submitSceneryOrder(formData) {
+  console.log(formData)
+  const {user_id, sid, scenery_policy_id, scenery_name, policy_name, unit_price, price_sum, order_status, phone, create_at, num, traveler_name, traveler_id_number} = formData;
+
+  try {
+
+    // 查询景区政策对应的库存
+    const stockSql = `SELECT stock FROM scenery_stock WHERE scenery_policy_id = ?`;
+    const [stocks] = await db.query(stockSql, [scenery_policy_id]);
+    if (stocks.length === 0) {
+      throw new Error('No stock found for policy');
+    }
+
+    const currentStock = stocks[0].stock;
+    if (currentStock < num) {
+      throw new Error('Not enough stock');
+    }
+
+    // 更新库存
+    const newStock = currentStock - num;
+    const updateStockSql = `UPDATE scenery_stock SET stock = ? WHERE scenery_policy_id = ?`;
+    await db.query(updateStockSql, [newStock, scenery_policy_id]);
+
+    // 插入订单
+    const sql = `
+      INSERT INTO scenery_order (
+        user_id, sid, scenery_name, policy_name, unit_price, price_sum, order_status, phone, create_at, num, traveler_name, traveler_id_number
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    `;
+    const [result] = await db.query(sql, [user_id, sid, scenery_name, policy_name, unit_price, price_sum, order_status, phone, create_at, num, traveler_name, traveler_id_number]);
+    console.log(result,'result');
+    return result;
+  } catch (error) {
+    console.error('Error submit order:', error);
+    throw error;
+  }
+}
+
+// 获取订单信息
+async function getUserOrder(data) {
+  const { user_id } = data;
+  const sql = `SELECT * FROM scenery_order WHERE user_id = ?`;
+  try {
+    const [result] = await db.query(sql,[user_id]);
+    // console.log(result, 'result');
+    return result;
+  } catch (error) {
+    onsole.error('Failed to retrieve data:', error);
+    throw error; // 重新抛出错误，允许调用者处理异常
+  }
+}
+
+// 取消景区订单
+async function cancelSceneryOrder(data) {
+  const { orderNo } = data;
+  const sql = 'UPDATE scenery_order SET order_status = ? WHERE scenery_order_id = ?;';
+  try {
+    const [result] = await db.query(sql,[ '已取消',orderNo]);
+    // console.log(result, 'result');
+    return result;
+  } catch (error) {
+    onsole.error('Failed to retrieve data:', error);
+    throw error; // 重新抛出错误，允许调用者处理异常
+  }
+}
+
+
 module.exports = {
   getUserInfo,
   modifyUserInfo,
   login,
   register,
   getSceneryByCity,
-  getSceneryBySid
+  getSceneryBySid,
+  getCommentBySid,
+  publishComment,
+  getStoreInfo,
+  getSceneryStock,
+  submitSceneryOrder,
+  getUserOrder,
+  cancelSceneryOrder
 };
