@@ -49,11 +49,11 @@ const current = ref("苏州");
 const currentScenery = ref([]);
 
 const hotCity = ref([
-  { city: "南通" },
+  { city: "上海" },
   { city: "无锡" },
   { city: "苏州" },
-  { city: "常州" },
-  { city: "上海" },
+  { city: "杭州" },
+  { city: "南通" },
   { city: "常州" },
   { city: "嘉兴" },
 ]);

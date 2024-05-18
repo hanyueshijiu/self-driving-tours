@@ -5,7 +5,7 @@
         <img :src="detailInfo.imgUrl" alt="" />
         <div class="detailInfo">
           <div class="line">
-            <span class="title">{{ detailInfo.sceneryName }}</span><span class="star">{{ detailInfo.star }}景区
+            <span class="title">{{ detailInfo.sceneryName }}</span><span class="star" v-if="detailInfo.star">{{ detailInfo.star }}景区
             </span><span class="type">{{ detailInfo.special }}</span>
           </div>
           <div class="line">

@@ -111,6 +111,17 @@ router.post('/getStoreInfo', async(req, res) => {
   }
 })
 
+// 更新店铺信息
+router.post('/modifyStoreInfo', async(req, res) => {
+  try {
+    const result = await dbOperations.modifyStoreInfo(req.body);
+    res.status(200).send(result);
+  } catch (err) {
+    console.error('Database error:', err);
+    res.status(401).send('服务错误');
+  }
+})
+
 // 获取库存信息
 router.post('/getSceneryStock', async(req, res) => {
   try {

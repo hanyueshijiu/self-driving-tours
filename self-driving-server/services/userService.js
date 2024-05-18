@@ -3,7 +3,7 @@ const db = require('../config/dbConfig');
 // 获取个人信息sql
 async function getUserInfo(userData) {
   const { phone } = userData;
-  const userInfo = await db.query('SELECT * FROM userinfo WHERE phone = ?;',[phone]);
+  const userInfo = await db.query('SELECT * FROM userinfo WHERE phone = ?;', [phone]);
   return userInfo;
 }
 
@@ -17,7 +17,7 @@ async function modifyUserInfo(userData) {
     if (users.length > 0) {
       // 电话号码存在，执行更新操作
       const updateSql = 'UPDATE UserInfo SET name = ?, nickname = ?, email = ?, sex = ?, birthday = ?, introduction = ? WHERE phone = ?;';
-      const [updateResult] = await db.query(updateSql, [name, nickname, email , sex, birthday, introduction, phone]);
+      const [updateResult] = await db.query(updateSql, [name, nickname, email, sex, birthday, introduction, phone]);
       if (updateResult.affectedRows > 0) {
         return { success: true, message: 'User info updated successfully.' };
       } else {
@@ -104,8 +104,8 @@ async function getSceneryByCity(userData) {
   try {
     // 执行查询并获取结果
     const [rows] = await db.query(
-      'SELECT * FROM scenery WHERE city = ?',
-      [city]
+      'SELECT * FROM scenery WHERE city like ?',
+      [`%${city}%`]
     );
 
     // 输出结果
@@ -156,7 +156,7 @@ async function getCommentBySid(userData) {
 
 // 发布评论
 async function publishComment(commentData) {
-  const {user_id, nick_name, sid, comment_content, publish_time  } = commentData;
+  const { user_id, nick_name, sid, comment_content, publish_time } = commentData;
   const sql = `
     INSERT INTO scenery_comment (
       user_id, nick_name, sid, comment_content, publish_time, is_anonymity
@@ -176,11 +176,28 @@ async function getStoreInfo(userData) {
   const { user_id } = userData;
   const sql = `SELECT * FROM scenery WHERE user_id = ?`;
   try {
-    const [result] = await db.query(sql,[user_id]);
+    const [result] = await db.query(sql, [user_id]);
     // console.log(result, 'result');
     return result;
   } catch (error) {
-    onsole.error('Failed to retrieve data:', error);
+    console.error('Failed to retrieve data:', error);
+    throw error; // 重新抛出错误，允许调用者处理异常
+  }
+}
+
+// 修改商铺信息
+async function modifyStoreInfo(storeInfo) {
+  const { sid, sceneryName, address, special, star, evaluate, openTime, facility, playTime, telephone } = storeInfo;
+  try {
+    const updateSql = 'UPDATE scenery SET sceneryName = ?, address = ?, special = ?, star = ?, evaluate = ?, openTime = ? , facility = ? , playTime = ? , telephone = ? WHERE sid = ?;';
+    const [updateResult] = await db.query(updateSql, [ sceneryName, address, special, star, evaluate, openTime, facility, playTime, telephone,sid]);
+    if (updateResult.affectedRows > 0) {
+      return { success: true, message: 'storeInfo updated successfully.' };
+    } else {
+      return { success: false, message: 'No changes made to the storeInfo.' };
+    }
+  } catch (error) {
+    console.error('Failed to retrieve data:', error);
     throw error; // 重新抛出错误，允许调用者处理异常
   }
 }
@@ -190,11 +207,11 @@ async function getSceneryStock(data) {
   const { sid } = data;
   const sql = `SELECT * FROM scenery_stock WHERE sid = ?`;
   try {
-    const [result] = await db.query(sql,[sid]);
+    const [result] = await db.query(sql, [sid]);
     // console.log(result, 'result');
     return result;
   } catch (error) {
-    onsole.error('Failed to retrieve data:', error);
+    console.error('Failed to retrieve data:', error);
     throw error; // 重新抛出错误，允许调用者处理异常
   }
 }
@@ -202,7 +219,7 @@ async function getSceneryStock(data) {
 // 提交景区订单
 async function submitSceneryOrder(formData) {
   console.log(formData)
-  const {user_id, sid, scenery_policy_id, scenery_name, policy_name, unit_price, price_sum, order_status, phone, create_at, num, traveler_name, traveler_id_number} = formData;
+  const { user_id, sid, scenery_policy_id, scenery_name, policy_name, unit_price, price_sum, order_status, phone, create_at, num, traveler_name, traveler_id_number } = formData;
 
   try {
 
@@ -230,7 +247,7 @@ async function submitSceneryOrder(formData) {
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     `;
     const [result] = await db.query(sql, [user_id, sid, scenery_name, policy_name, unit_price, price_sum, order_status, phone, create_at, num, traveler_name, traveler_id_number]);
-    console.log(result,'result');
+    console.log(result, 'result');
     return result;
   } catch (error) {
     console.error('Error submit order:', error);
@@ -243,7 +260,7 @@ async function getUserOrder(data) {
   const { user_id } = data;
   const sql = `SELECT * FROM scenery_order WHERE user_id = ?`;
   try {
-    const [result] = await db.query(sql,[user_id]);
+    const [result] = await db.query(sql, [user_id]);
     // console.log(result, 'result');
     return result;
   } catch (error) {
@@ -257,7 +274,7 @@ async function cancelSceneryOrder(data) {
   const { orderNo } = data;
   const sql = 'UPDATE scenery_order SET order_status = ? WHERE scenery_order_id = ?;';
   try {
-    const [result] = await db.query(sql,[ '已取消',orderNo]);
+    const [result] = await db.query(sql, ['已取消', orderNo]);
     // console.log(result, 'result');
     return result;
   } catch (error) {
@@ -280,5 +297,6 @@ module.exports = {
   getSceneryStock,
   submitSceneryOrder,
   getUserOrder,
-  cancelSceneryOrder
+  cancelSceneryOrder,
+  modifyStoreInfo
 };

@@ -11,9 +11,9 @@
       <span v-else>{{storeInfo.address}}</span>
     </div>
     <div class="line">
-      <p>特点描述：</p>
-      <a-input type="text" v-model:value="storeInfo.facility" v-if="isEdit" />
-      <span v-else>{{storeInfo.facility}}</span>
+      <p>特征分类：</p>
+      <a-input type="text" v-model:value="storeInfo.special" v-if="isEdit" />
+      <span v-else>{{storeInfo.special}}</span>
     </div>
     <div class="line">
       <p>景区星级：</p>
@@ -52,12 +52,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import http from '@/utils/http';
 
+interface StoreInfo {
+  sid: number;
+  sceneryName?: string;
+  address?: string;
+  facility?: string;
+  star?: string;
+  evaluate?: string;
+  openTime?: string;
+  playTime?: string;
+  telephone?: string;
+  special?: string;
+}
 
 const isEdit = ref<boolean>(false);
-let storeInfo = ref({});
+let storeInfo = ref<StoreInfo>({});
 
 onMounted(async() => {
   const getUser = window.localStorage.getItem('userInfo');
@@ -65,17 +77,19 @@ onMounted(async() => {
     let { user_id } = JSON.parse(getUser);
     const store = await http.post('/api/getStoreInfo',{user_id});
     storeInfo.value = store.data[0];
-    console.log(store.data[0],'storeInfo');
+    window.localStorage.setItem('storeSid', JSON.stringify(storeInfo.value.sid));
   }
 });
 
-const submit = () => {
+const submit = async() => {
   isEdit.value = !isEdit.value;
   if(isEdit.value) {
-    console.log('修改')
+    // console.log('点击修改');
     return;
   }
-  console.log('保存')
+  // console.log('点击保存：',storeInfo.value);
+  const result = await http.post('/api/modifyStoreInfo',storeInfo.value);
+  console.log(result,'更新结果。')
 }
 </script>
 
