@@ -30,14 +30,14 @@ const items = ref<MenuProps['items']>([
   {
     key: 'productList',
     icon: () => h(AppstoreOutlined),
-    label: '商品列表',
-    title: '商品列表',
+    label: '旅游资源列表',
+    title: '旅游资源列表',
   },
   {
     key: 'addProduct',
     icon: () => h(SettingOutlined),
-    label: '新增商品',
-    title: '新增商品',
+    label: '新增旅游资源',
+    title: '新增旅游资源',
   },
 ]);
 
